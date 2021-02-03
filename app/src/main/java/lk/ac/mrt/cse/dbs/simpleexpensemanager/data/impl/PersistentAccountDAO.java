@@ -31,7 +31,12 @@ public class PersistentAccountDAO implements AccountDAO {
     // code to get a specific single account
     @Override
     public Account getAccount(String accountNo) throws InvalidAccountException {
-        return databaseHandler.getAccount(accountNo);
+        if (databaseHandler.getAccountNumbersList().contains(accountNo)){
+            return databaseHandler.getAccount(accountNo);
+        }else{
+            String msg = "Account " + accountNo + " is invalid.";
+            throw new InvalidAccountException(msg);
+        }
     }
 
     // code to add an account
@@ -43,13 +48,24 @@ public class PersistentAccountDAO implements AccountDAO {
     // code to remove an account
     @Override
     public void removeAccount(String accountNo) throws InvalidAccountException {
-        databaseHandler.removeAccount(accountNo);
+        if (databaseHandler.getAccountNumbersList().contains(accountNo)) {
+            databaseHandler.removeAccount(accountNo);
+        }
+        else{
+            String msg = "Account " + accountNo + " is invalid.";
+            throw new InvalidAccountException(msg);
+        }
     }
 
     // code to update balance
     @Override
     public void updateBalance(String accountNo, ExpenseType expenseType, double amount) throws InvalidAccountException {
-        databaseHandler.updateBalance(accountNo, expenseType, amount);
+        if (databaseHandler.getAccountNumbersList().contains(accountNo)) {
+            databaseHandler.updateBalance(accountNo, expenseType, amount);
+        } else {
+            String msg = "Account " + accountNo + " is invalid.";
+            throw new InvalidAccountException(msg);
+        }
     }
 
 }
